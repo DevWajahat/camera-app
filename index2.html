@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera WebApp</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        video {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border: 2px solid #fff;
+            transform: scaleX(-1); /* Flip horizontally */
+        }
+        canvas {
+            display: none;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+        <button id="toggleCamera">Toggle Camera</button>
+        <button id="toggleFlashlight">Toggle Flashlight</button>
+        <button id="capture">Capture</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+<script>
+    let videoElement = document.getElementById('video');
+let canvasElement = document.getElementById('canvas');
+let currentStream;
+let useFrontCamera = true;
+let flashEnabled = false;
+
+async function startCamera() {
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+
+    try {
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? 'user' : 'environment',
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                focusMode: 'auto'
+            }
+        };
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        videoElement.srcObject = currentStream;
+
+        // Flip the video horizontally for the front camera
+        if (useFrontCamera) {
+            videoElement.style.transform = 'scaleX(-1)';
+        } else {
+            videoElement.style.transform = 'scaleX(1)'; // Reset for back camera
+        }
+    } catch (err) {
+        console.error('Error accessing media devices.', err);
+    }
+}
+
+document.getElementById('toggleCamera').addEventListener('click', () => {
+    useFrontCamera = !useFrontCamera;
+    startCamera();
+});
+
+document.getElementById('toggleFlashlight').addEventListener('click', async () => {
+    if (!currentStream) return;
+
+    const track = currentStream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+    if (capabilities.torch) {
+        flashEnabled = !flashEnabled;
+        await track.applyConstraints({
+            advanced: [{ torch: flashEnabled }]
+        });
+    } else {
+        alert('Flashlight is not supported on this device.');
+    }
+});
+
+document.getElementById('capture').addEventListener('click', () => {
+    const context = canvasElement.getContext('2d');
+    canvasElement.width = videoElement.videoWidth;
+    canvasElement.height = videoElement.videoHeight;
+    context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    const imageData = canvasElement.toDataURL('image/png');
+    // Download the image
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = 'capture.png';
+    link.click();
+});
+
+startCamera();
+
+</script>
