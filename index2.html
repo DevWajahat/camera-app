@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camera WebApp</title>
-    <style>
+    <!-- Remix-icon Link  -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- Css link  -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- <style>
         body {
             display: flex;
             flex-direction: column;
@@ -35,16 +40,18 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-    </style>
+    </style> -->
 </head>
 <body>
 
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas"></canvas>
     <div id="controls">
-        <button id="toggleCamera">Toggle Camera</button>
-        <button id="toggleFlashlight">Toggle Flashlight</button>
-        <button id="capture">Capture</button>
+        <!-- <button id="toggleCamera">Toggle Camera</button> -->
+        <button id="toggleCamera"><i class="ri-camera-switch-fill"></i></i></button>
+        <!-- <button id="toggleFlashlight">Toggle Flashlight</button> -->
+        <button id="capture"> <i class="ri-camera-fill"></i></button>
+        <button id="toggleFlashlight"><i class="ri-flashlight-fill"></i></button>
     </div>
 
     <script src="app.js"></script>

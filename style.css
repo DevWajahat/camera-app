@@ -1,0 +1,82 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100vh;
+    background-color: #000;
+}
+
+/* Video Container */
+#video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+canvas {
+    display: none;
+}
+
+video {
+    width: 450px;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    transform: scaleX(-1); /* Flip for front camera */
+}
+
+/* Controls Container */
+#controls {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0, 0, 0, 0.5); 
+    padding: 10px 0;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s;
+}
+
+button i {
+    font-size: 30px;
+}
+
+/* Mobile Screen */
+@media (max-width: 480px) {
+    video {
+        width: 100%;
+        height: 100%;
+    }
+
+    button {
+        width: 50px;
+        height: 50px;
+    }
+
+    button i {
+        font-size: 24px;
+    }
+}
