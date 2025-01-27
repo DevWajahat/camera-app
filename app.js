@@ -152,7 +152,6 @@ document.getElementById('prevImage').onclick = () => {
         alert('No images in the gallery.');
         return;
     }
-    // Move to the previous image, looping back if at the start
     currentCropIndex = (currentCropIndex - 1 + gallery.length) % gallery.length;
     const cropImage = document.getElementById('cropImage');
     cropImage.src = gallery[currentCropIndex];
